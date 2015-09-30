@@ -15,8 +15,8 @@ The user interface is deliberately simple, with the black background intended to
 
 0. Acquire or excavate from the hall closet a tablet-like device.  In my case, it's an iPad that has managed to outlive most of its technological contemporaries and managed to really look good doing so.  It deserves a place of honor behind the mirror in the entryway.
 1. Clone this project.
-2. Get a [https://developer.forecast.io](forecast.io API key).
-3. In `js/wx-dashboard.js`, assign your forecast.io API key to `_FORECAST_IO_APIKEY`.  While you're there, under `_LOCATION`, also enter the latitude and the longitude of the location whose weather you wish to display.
+2. Get a [forecast.io API key](https://developer.forecast.io).
+3. In `js/forecast-io.js`, assign your forecast.io API key to `_APIKEY`.  While you're there, under `_LOCATION`, also enter the latitude and the longitude of the location whose weather you wish to display.
 4. Either load or copy all of the files not under the `misc` directory to the device and run `index.html`, or set it up on a server to be accessed by the device.  Your call.
 
 # References
