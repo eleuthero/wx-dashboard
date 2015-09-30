@@ -1,7 +1,7 @@
 # wx-dashboard
 Javascript-based dashboard for showing time, weather, and other information.
 
-This very small project was largely inspired by https://github.com/HannahMitt/HomeMirror's spectacular idea and my similar circumstance of having some old, bored technology around the house well past its sell-by date but still capable of achieving some small degree of technological self-actualization.
+This very small project was largely inspired by https://github.com/HannahMitt/HomeMirror and my similar circumstance of having some old, bored technology around the house well past its sell-by date but still capable of achieving some small degree of technological self-actualization.
 
 This application is written in completely in Javascript, jQuery, slightly out-of-date CSS, and slightly-out-of-date HTML4, largely because the technology it'll be running on is somewhat stale.  At present, this project generates a single webpage that integrates with the [http://forecast.io](https://developer.forecast.io/docs/v2) API to show the current time and current and forecasted weather at a single location of your choice.  In the future, I hope to be adding other forms of integration that go beyond current time and weather.
 
