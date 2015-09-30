@@ -9,7 +9,7 @@ The user interface is deliberately simple, with the black background intended to
 
 # Screenshot
 
-![wx-dashboard screenshot](https://github.com/eleuthero/wx-dashboard/misc/wx-dashboard.png "wx-dashbaord screenshot")
+![wx-dashboard screenshot](https://github.com/eleuthero/wx-dashboard/blob/master/misc/wx-dashboard.png?raw=true "wx-dashbaord screenshot")
 
 # How do I work this ?
 
