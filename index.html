@@ -1,140 +1,171 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>wx-dashboard</title>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <head>
+        <title>wx-dashboard</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-		<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-		<script type="text/javascript" src="js/wx-dashboard.js"></script>
-		<script type="text/javascript" src="js/forecast-io.js"></script>
-		
-		<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-		<link href='css/wx-dashboard.css' rel='stylesheet' type='text/css'>
-		<link href='css/forecast-io.css' rel='stylesheet' type='text/css'>
+        <!-- TODO: consider making CDN call and removing from project -->
+        <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
 
-		<script type="text/javascript">
+        <script type="text/javascript" src="js/wx-dashboard.js"></script>
+        <link href='css/wx-dashboard.css' rel='stylesheet' type='text/css'>
 
-		$(document)
-			.ready
-			(
-				function ()
-				{
-					WxDashboard.init
-					(
-						{
-							debug: true
-						}
-					);
+        <script type="text/javascript" src="js/forecast-io.js"></script>
+        <link href='css/forecast-io.css' rel='stylesheet' type='text/css'>
+
+        <script type="text/javascript" src="js/wsdot-commute.js"></script>
+        <link href='css/wsdot-commute.css' rel='stylesheet' type='text/css'>
+
+        <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+        <script type="text/javascript">
+
+        $(document)
+            .ready
+            (
+                function ()
+                {
+                    WxDashboard.init
+                    (
+                        {
+                            debug: true
+                        }
+                    );
 
                     ForecastIO.init
                     (
                         {
                             debug: true,
-                            useStaticForecast: true
+                            // useStatic: true 
+                        }
+                    );
+
+                    WsDotCommute.init
+                    (
+                        {
+                            debug: true,
+                            filter:
+                                function (json)
+                                {
+                                    return json.Description
+                                               .toLowerCase()
+                                               .indexOf('everett to') >= 0;
+                                },
+                            // useStatic: true
                         }
                     );
 
                     WxDashboard.start();
-				}
-			)
+                }
+            )
 
-		</script>
+        </script>
 
-	</head>
-	<body>
+    </head>
+    <body>
 
-		<div class="CURRENT">
-			<table>
-				<tbody>
-					<tr>
-						<td class="CURRENT_WEATHER">
+        <div class="CURRENT">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="CURRENT_WEATHER">
 
-							<!-- Current weather -->
-							<img class="CURRENT_ICON"></img>
-							<span>
-								<div class="CURRENT_TEMP"></div>
-								<div class="CURRENT_SUMMARY"></div>
-							</span>
+                            <!-- Current weather -->
+                            <img class="CURRENT_ICON"></img>
+                            <span>
+                                <div class="CURRENT_TEMP"></div>
+                                <div class="CURRENT_SUMMARY"></div>
+                            </span>
 
-						</td>
-						<td class="CURRENT_DATETIME">
+                        </td>
+                        <td class="CURRENT_DATETIME">
 
-							<!-- Current date and time -->
-							<div class="CURRENT_TIME"></div>
-							<div class="CURRENT_DATE"></div>
+                            <!-- Current date and time -->
+                            <div class="CURRENT_TIME"></div>
+                            <div class="CURRENT_DATE"></div>
 
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-		<!-- Hourly forecast -->
-		<div class="TODAY">
-			<table>
-				<tr>
-					<!-- Today's summary -->
-					<td class="TODAY_OVERVIEW">
-						<span class="TODAY_SUMMARY"></span>
-						<span class="TODAY_PRECIP PRECIP" style="display: none;">
-							<img class="PRECIP_ICON"></img>
-							<span class="PRECIP_CHANCE"></span>
-						</span>
-						<span class="TODAY_TEMPS"></span>
-					</td>
+        <!-- Hourly forecast -->
+        <div class="TODAY">
+            <table>
+                <tr>
+                    <!-- Today's summary -->
+                    <td class="TODAY_OVERVIEW">
+                        <span class="TODAY_SUMMARY"></span>
+                        <span class="TODAY_PRECIP PRECIP" style="display: none;">
+                            <img class="PRECIP_ICON"></img>
+                            <span class="PRECIP_CHANCE"></span>
+                        </span>
+                        <span class="TODAY_TEMPS"></span>
+                    </td>
 
-					<!-- Sunrise/sunset -->
-					<td class="TODAY_EPHEMERIS">
-						<span>
-							<img class="RISE" />
-							<span class="SUNRISE"></span>
-							<img class="SET" />
-							<span class="SUNSET"></span>
-						</span>
-						<span>
-							<img class="MOONPHASE" />
-							<span class="LUNATION"></span>
-						</span>
-					</td>
-				</tr>
-			</div>
-			<table class="HOURLY_FORECAST">
-				<tbody>
-					<tr>
+                    <!-- Sunrise/sunset -->
+                    <td class="TODAY_EPHEMERIS">
+                        <span>
+                            <img class="RISE" />
+                            <span class="SUNRISE"></span>
+                            <img class="SET" />
+                            <span class="SUNSET"></span>
+                        </span>
+                        <span>
+                            <img class="MOONPHASE" />
+                            <span class="LUNATION"></span>
+                        </span>
+                    </td>
+                </tr>
+            </div>
+            <table class="HOURLY_FORECAST">
+                <tbody>
+                    <tr>
 
-						<!-- Hourly template -->
-						<td class="HOURLY_TEMPLATE" style="display: none;">
-							<div class="HOURLY_TIME"></div>
-							<div class="HOURLY">
-								<img class="HOURLY_ICON"></img>
-								<span class="HOURLY_PRECIP PRECIP"></span>
-							</div>
-							<div class="HOURLY_TEMP"></div>
-						</td>
+                        <!-- Hourly template -->
+                        <td class="HOURLY_TEMPLATE" style="display: none;">
+                            <div class="HOURLY_TIME"></div>
+                            <div class="HOURLY">
+                                <img class="HOURLY_ICON"></img>
+                                <span class="HOURLY_PRECIP PRECIP"></span>
+                            </div>
+                            <div class="HOURLY_TEMP"></div>
+                        </td>
 
-					</tr>
-				</tbody>
-			</table>
-		</div>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-		<!-- Daily forecast -->
-		<div class="DAILY_FORECAST">
+        <!-- Daily forecast -->
+        <div class="DAILY_FORECAST">
 
-			<!-- Hourly template -->
-			<div class="DAILY_TEMPLATE" style="display: none;">
-				<img class="DAILY_ICON"></img>
-				<span class="DAILY_TEXT"></span>
-				<span class="DAILY_PRECIP PRECIP" style="display: none;">
-					<img class="PRECIP_ICON"></img>
-					<span class="PRECIP_CHANCE"></span>
-				</span>
-				<span class="DAILY_TEMPS"></span>
-			</div>
+            <!-- Hourly template -->
+            <div class="DAILY_TEMPLATE" style="display: none;">
+                <img class="DAILY_ICON"></img>
+                <span class="DAILY_TEXT"></span>
+                <span class="DAILY_PRECIP PRECIP" style="display: none;">
+                    <img class="PRECIP_ICON"></img>
+                    <span class="PRECIP_CHANCE"></span>
+                </span>
+                <span class="DAILY_TEMPS"></span>
+            </div>
 
-		</div>
+        </div>
 
-		<!-- Status -->
-		<div class="STATUS"></div>
+        <!-- Commutes -->
+        <div class="COMMUTES">
 
-	</body>
+            <!-- Commute template -->
+            <div class="COMMUTE_TEMPLATE" style="display: none;">
+                <span class="COMMUTE_DIFF"></span>
+                <span class="COMMUTE_TEXT"></span>
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="STATUS"></div>
+
+    </body>
 </html>

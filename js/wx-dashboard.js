@@ -57,22 +57,57 @@ if (! this.WxDashboard)
                 WxDashboard._onTimerTick();
             },
 
-        setStatus:
-            function (message, props)
+        /* Add or replace a message in the status bar.
             {
-                props =
+                source: <string>,   required
+                message: <string>,  required
+                isError: <bool>     default: false.
+            }
+        */ 
+        registerStatus:
+            function (info)
+            {
+                info =
                     $.extend
                     (
                         { },
                         {
+                            source: '',
+                            message: '',
                             isError: false
                         },
-                        props || { }
+                        info || { }
                     );
 
-                $('.STATUS')
-                    .text(message)
-                    .toggleClass('ERROR', props.isError);
+                var $status = $('.STATUS');
+
+                // See if this status message has already been registered.
+
+                var $current =
+                    $status
+                        .children()
+                            .filter
+                            (
+                                function ()
+                                {
+                                    return (info.source ===
+                                            $(this).data('source'));
+                                }
+                            );
+
+                // If not, add it.
+
+                if (! $current.length)
+                {
+                    $current =
+                        $('<div>')
+                            .hide()
+                            .appendTo($status);
+                }
+
+                $current
+                    .text(info.message)
+                    .toggleClass('ERROR', info.isError);
             },
 
         formatMillis:
@@ -181,6 +216,43 @@ if (! this.WxDashboard)
                 }
 
                 return text;
+            },
+
+        cycleContainer:
+            function ($container)
+            {
+                if ($container.children().length < 2)
+                {
+                    // Not enough children to toggle.
+
+                    return;
+                }
+
+                var $current = $container.children(':visible');
+
+                if (! $current.length)
+                {
+                    $current = $container.children(':first');
+                }
+
+                $current
+                    .fadeOut
+                    (
+                        'slow',
+                        function ()
+                        {
+                            var $next =
+                                $(this).next().length
+                                    ? $(this).next()
+                                    : $(this).siblings(':first');
+
+                            $next
+                                .fadeIn
+                                (
+                                    'slow'
+                                );
+                        }
+                    );
             },
 
         // private:
@@ -339,6 +411,7 @@ if (! this.WxDashboard)
 
                 WxDashboard._updateCurrentTime();
                 WxDashboard._updateCurrentDate();
+                WxDashboard.cycleContainer( $('.STATUS') );
             },
 
         _updateCurrentTime:

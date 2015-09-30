@@ -1,0 +1,14 @@
+.COMMUTES
+{
+
+}
+
+    .COMMUTE_DIFF.COMMUTE_FAST
+    {
+        color: #00FF66;
+    }
+
+    .COMMUTE_DIFF.COMMUTE_SLOW
+    {
+        color: #FF6666;
+    }

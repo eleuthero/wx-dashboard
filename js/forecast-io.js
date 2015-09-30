@@ -20,6 +20,8 @@ if (! this.ForecastIO)
         // private:
 
         // Set with your own forecast.io API key and location.
+        // You can obtain a free API key good for 1000 requests a day
+        // at https://developer.forecast.io.
 
         _APIKEY: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 
@@ -27,8 +29,8 @@ if (! this.ForecastIO)
 
         _LOCATION:
             {
-                latitude: 27.466667,
-                longitude: 89.461667
+				latitude: 48.019722,
+				longitude: -122.066111
             },
         
         // Default settings.
@@ -39,7 +41,7 @@ if (! this.ForecastIO)
                 // static JSON object and used.  Saves on your API call
                 // count if you're developing.
 
-                useStaticForecast: false,
+                useStatic: false,
 
                 // Enable for debugging.
 
@@ -108,7 +110,12 @@ if (! this.ForecastIO)
                     {
                         wx_timer_1:
                             {
-                                interval: 15000,            // TODO
+                                // Update UI with low-cost operations every
+                                // 15 seconds.  Right now, this is just used
+                                // to switch between the sunrise/sunset
+                                // and moon phase UIs to be cycled.
+
+                                interval: 15000,
 
                                 onElapsed:
                                     function ()
@@ -141,39 +148,104 @@ if (! this.ForecastIO)
             {
                 ForecastIO._debug('ForecastIO._onUITimerTick();');
 
-                ForecastIO._toggleEphemeris();
+                WxDashboard.cycleContainer( $('.TODAY_EPHEMERIS') );
             },
 
-        _toggleEphemeris:
+        _requestForecast:
             function ()
             {
-                var $eph = $('.TODAY_EPHEMERIS');
+                ForecastIO._debug('ForecastIO._requestForecast();');
 
-                if ($eph.children < 2)
+                // If we're using the static forecast, just return one
+                // from the debugging function.  Saves on API calls when
+                // developing.
+
+                if (ForecastIO._settings.useStatic)
                 {
-                    // Not enough children to toggle.
+                    ForecastIO._debug
+                    (
+                        [
+                            'ForecastIO._requestForecast():',
+                            'using static forecast.'
+                        ]
+                        .join(' ')
+                    );
+
+                    ForecastIO._onForecastReceived
+                    (
+                        ForecastIO._getStaticForecast()
+                    );
 
                     return;
                 }
 
-                var $current = $eph.children(':visible');
+                // Since we're targeting older hardware with browsers that
+                // may not support CORS, we'll use JSONP to avoid running
+                // afoul of the same-origin policy.  Be sure to do
+                // due-diligence and use caution when doing this in general,
+                // but for our purposes as a personal/internal-use kind of
+                // application, it's convenient.
 
-                $current
-                    .fadeOut
+                var url = 
+                    [
+                        'https://api.forecast.io/forecast/',
+                        ForecastIO._APIKEY,
+                        '/',
+                        ForecastIO._LOCATION.latitude,
+                        ',',
+                        ForecastIO._LOCATION.longitude,
+                        '?callback=?'
+                    ]
+                    .join('');
+
+                ForecastIO._debug
+                (
+                    'ForecastIO._requestForecast(): url: ' + url
+                );
+
+                $.getJSON(url)
+                    .done
                     (
-                        'slow',
-                        function ()
+                        function (data)
                         {
-                            var $next =
-                                $(this).next().length
-                                    ? $(this).next()
-                                    : $(this).siblings(':first');
+                            ForecastIO._debug
+                            (
+                                'ForecastIO._requestForecast(): success.'
+                            );
 
-                            $next
-                                .fadeIn
-                                (
-                                    'slow'
-                                );
+                            ForecastIO._onForecastReceived(data);
+                        }
+                    )
+                    .fail
+                    (
+                        function (_, textStatus, errorThrown)
+                        {
+                            ForecastIO._debug
+                            (
+                                [
+                                    'ForecastIO._requestForecast(): fail:',
+                                    'textstatus:', textStatus,
+                                    'errorThrown:', errorThrown
+                                ]
+                                .join(' ')
+                            );
+
+                            // Set the status bar message and indicate
+                            // an error.
+
+                            WxDashboard.registerStatus
+                            (
+                                {
+                                    source: 'forecast-io',
+                                    message:
+                                        [
+                                            'Error requesting forecast:',
+                                            errorThrown
+                                        ]
+                                        .join(' '),
+                                    isError: true
+                                }
+                            );
                         }
                     );
             },
@@ -191,33 +263,37 @@ if (! this.ForecastIO)
                     .join(' ')
                 );
 
-                WxDashboard.setStatus 
+                WxDashboard.registerStatus
                 (
-                    [
-                        'Forecast updated ',
-                        WxDashboard.formatDate
-                        (
-                            new Date(),
-                            null,
-                            {
-                                month: 'numeric',
-                                day: 'numeric',
-                                year: 'numeric'
-                            }
-                        ),
-                        ' ',
-                        WxDashboard.formatTime
-                        (
-                            new Date(),
-                            null,
-                            {
-                                hour: 'numeric',
-                                minute: 'numeric'
-                            }
-                        ),
-                        '.'
-                    ]
-                    .join('')
+                    {
+                        source: 'forecast-io',
+                        message:
+                            [
+                                'Forecast updated ',
+                                WxDashboard.formatDate
+                                (
+                                    new Date(),
+                                    null,
+                                    {
+                                        month: 'numeric',
+                                        day: 'numeric',
+                                        year: 'numeric'
+                                    }
+                                ),
+                                ' ',
+                                WxDashboard.formatTime
+                                (
+                                    new Date(),
+                                    null,
+                                    {
+                                        hour: 'numeric',
+                                        minute: 'numeric'
+                                    }
+                                ),
+                                '.'
+                            ]
+                            .join('')
+                    }
                 );
 
                 ForecastIO._updateCurrentWeather(forecast);
@@ -533,9 +609,6 @@ if (! this.ForecastIO)
                 }
             },
 
-        /* Utilities */
-
-
         _formatTemp:
             function (f, props)
             {
@@ -606,104 +679,6 @@ if (! this.ForecastIO)
                     console.log(message);
                 }
             },
-
-        _requestForecast:
-            function ()
-            {
-                ForecastIO._debug('ForecastIO._requestForecast();');
-
-                // If we're using the static forecast, just return one
-                // from the debugging function.  Saves on API calls when
-                // developing.
-
-                if (ForecastIO._settings.useStaticForecast)
-                {
-                    ForecastIO._debug
-                    (
-                        [
-                            'ForecastIO._requestForecast():',
-                            'using static forecast.'
-                        ]
-                        .join(' ')
-                    );
-
-                    ForecastIO._onForecastReceived
-                    (
-                        ForecastIO._getStaticForecast()
-                    );
-
-                    return;
-                }
-
-                // Since we're targeting older hardware with browsers that
-                // may not support CORS, we'll use JSONP to avoid running
-                // afoul of the same-origin policy.  Be sure to do
-                // due-diligence and use caution when doing this in general,
-                // but for our purposes as a personal/internal-use kind of
-                // application, it's convenient.
-
-                var url = 
-                    [
-                        'https://api.forecast.io/forecast/',
-                        ForecastIO._APIKEY,
-                        '/',
-                        ForecastIO._LOCATION.latitude,
-                        ',',
-                        ForecastIO._LOCATION.longitude,
-                        '?callback=?'
-                    ]
-                    .join('');
-
-                ForecastIO._debug
-                (
-                    'ForecastIO._requestForecast(): url: ' + url
-                );
-
-                $.getJSON(url)
-                    .done
-                    (
-                        function (data)
-                        {
-                            ForecastIO._debug
-                            (
-                                'ForecastIO._requestForecast(): success.'
-                            );
-
-                            ForecastIO._onForecastReceived(data);
-                        }
-                    )
-                    .fail
-                    (
-                        function (_, textStatus, errorThrown)
-                        {
-                            ForecastIO._debug
-                            (
-                                [
-                                    'ForecastIO._requestForecast(): fail:',
-                                    'textstatus:', textStatus,
-                                    'errorThrown:', errorThrown
-                                ]
-                                .join(' ')
-                            );
-
-                            // Set the status bar message and indicate
-                            // an error.
-
-                            WxDashboard.setStatus
-                            (
-                                [
-                                    'Error requesting forecast:',
-                                    errorThrown
-                                ]
-                                .join(' '),
-                                {
-                                    isError: true
-                                }
-                            );
-                        }
-                    );
-            },
-
 
         _getStaticForecast:
             function ()

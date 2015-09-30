@@ -1,23 +1,23 @@
 body
 {
-	background-color: black;
-	color: white;
+    background-color: black;
+    color: white;
 
-	font-family: 'Roboto';
-	font-size: 24px;
-	letter-spacing: 2px;
+    font-family: 'Roboto';
+    font-size: 18px;
+    letter-spacing: 2px;
 
-	text-align: right;
+    text-align: right;
 }
 
-	body > div:not(:first-of-type)
-	{
-		margin-top: 32px;
-	}
+    body > div:not(:first-of-type)
+    {
+        margin-top: 32px;
+    }
 
 table
 {
-	width: 100%;
+    width: 100%;
 }
 
 .CURRENT
@@ -25,25 +25,25 @@ table
 
 }
 
-	.CURRENT_TIME
-	{
-		font-size: 48px;
-		letter-spacing: 4px;
-	}
+    .CURRENT_TIME
+    {
+        font-size: 48px;
+        letter-spacing: 4px;
+    }
 
 /* Status bar */
 
 .STATUS
 {
-	position: fixed;
-	bottom: 0;
-	height: 24px;
-	font-size: 16px;
-	width: 100%;
-	text-align: center;
+    position: fixed;
+    bottom: 0;
+    height: 24px;
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
 }
 
-	.STATUS.ERROR
-	{
-		color: red;
-	}
+    .STATUS .ERROR
+    {
+        color: #FF6666;
+    }
