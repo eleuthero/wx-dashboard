@@ -1,0 +1,200 @@
+.CURRENT
+{
+
+}
+
+	.CURRENT_WEATHER
+	{
+		text-align: left;
+	}
+
+	.CURRENT_ICON
+	{
+		zoom: 1.00;
+		float: left;
+	}
+
+	.CURRENT_TEMP
+	{
+		font-size: 48px;
+		letter-spacing: 4px;
+	}
+
+.TODAY
+{
+	font-size: 18px;
+	width: 100%;
+}
+
+	.TODAY_PRECIP
+	{
+
+	}
+	
+		.TODAY_PRECIP img
+		{
+			zoom: 0.25;
+		}
+
+	.TODAY_OVERVIEW
+	{
+		text-align: left;
+	}
+
+	.TODAY_EPHEMERIS
+	{
+		text-align: right;
+	}
+
+		.TODAY_EPHEMERIS img
+		{
+			zoom: 0.25;
+		}
+
+	.HOURLY_TEMPLATE
+	{
+		width: 96px;
+		text-align: center;
+		vertical-align: top;
+	}
+
+		.HOURLY
+		{
+			position: relative;
+		}
+
+			.HOURLY_ICON
+			{
+				zoom: 0.66;
+			}
+
+			.HOURLY_PRECIP
+			{
+				position: absolute;
+				top: 0;
+				right: 0;
+				font-size: 20px;
+				letter-spacing: 0;
+			}
+
+		.HOURLY_TIME
+		{
+			font-size: 12px;
+		}
+
+		.HOURLY_TEMP
+		{
+			font-size: 16px;
+		}
+
+.DAILY_FORECAST
+{
+	font-size: 18px;
+}
+
+	.DAILY_TEMPLATE
+	{
+
+	}
+
+		.DAILY_TEMPLATE img
+		{
+			zoom: 0.25;
+		}
+
+	.DAILY_PRECIP
+	{
+
+	}
+
+.PRECIP
+{
+	color: #0099FF;
+}
+
+/*
+	The images used were provided by the wonderful icon resource
+	Material Design Icons,  https://materialdesignicons.com.
+	The names of the classes are based on the icon names.
+*/
+
+img
+{
+	width: 96px;
+	height: 96px;
+	background: url(../images/icons.png);
+	background-repeat: no-repeat;
+	vertical-align: middle;
+}
+
+	img.cloudy
+	{
+		background-position: -96px 0;
+	}
+
+	img.fog
+	{
+		background-position: -192px 0;
+	}
+
+	img.hail,
+	img.sleet
+	{
+		background-position: -288px 0;
+	}
+
+	img.rain
+	{
+		background-position: -480px 0;
+	}
+
+	img.snow
+	{
+		background-position: -672px 0;
+	}
+
+	img.clear-day
+	{
+		background-position: 0 -96px;
+	}
+
+	img.clear-night
+	{
+		background-position: -96px -96px;
+	}
+
+	img.wind
+	{
+		background-position: -192px -96px;
+	}
+
+	img.partly-cloudy-day
+	{
+		background-position: -384px -96px;
+	}
+
+	img.partly-cloudy-night
+	{
+		background-position: -480px -96px;
+	}
+
+	img.UNKNOWN,
+	img.TODO
+	{
+		background-position: -672px -96px;
+	}
+
+	img.RISE
+	{
+		background-position: -96px -192px;
+	}
+
+	img.SET
+	{
+		background-position: -192px -192px;
+	}
+
+	img.MOONPHASE
+	{
+		background-position: -288px -192px;
+	}
