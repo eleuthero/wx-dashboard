@@ -7,6 +7,7 @@
         <!-- TODO: consider making CDN call and removing from project -->
         <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
 
+        <script type="text/javascript" src="js/wx-dashboard-config.js"></script>
         <script type="text/javascript" src="js/wx-dashboard.js"></script>
         <link href='css/wx-dashboard.css' rel='stylesheet' type='text/css'>
 
@@ -28,14 +29,14 @@
                     WxDashboard.init
                     (
                         {
-                            debug: true
+                            debug: WxConfig.debug
                         }
                     );
 
                     ForecastIO.init
                     (
                         {
-                            debug: true,
+                            debug: WxConfig.debug,
                             // useStatic: true 
                         }
                     );
@@ -43,7 +44,6 @@
                     WsDotCommute.init
                     (
                         {
-                            debug: true,
                             filter:
                                 function (json)
                                 {
@@ -51,6 +51,7 @@
                                                .toLowerCase()
                                                .indexOf('everett to') >= 0;
                                 },
+                            debug: WxConfig.debug,
                             // useStatic: true
                         }
                     );

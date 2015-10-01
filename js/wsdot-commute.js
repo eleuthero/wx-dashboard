@@ -19,19 +19,45 @@ if (! this.WsDotCommute)
         init:
             function (settings)
             {
-                WsDotCommute._init(settings);
+                WsDotCommute._settings =
+                    $.extend
+                    (
+                        { },
+                        WsDotCommute._defaultSettings,
+                        settings || { }
+                    );
+            
+                // Check for a valid config for this library.
 
+                if (! WsDotCommute._verifyConfig())
+                {
+                    // Configuration is missing.  Abort.
+
+                    ForecastIO._debug
+                    (
+                        [
+                            'WsDotCommute.init(): no config found.',
+                            'Aborting.'
+                        ]
+                        .join(' ')
+                    );
+
+                    return;
+                }
+
+                WsDotCommute._init(settings);
                 WsDotCommute._registerTimers();
             },
 
         // private:
 
-        // Set with your own wsdot.com API key.
-        // You can obtain one at http://wsdot.com/traffic/api.
-
-        _APIKEY: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-
         // Default settings.
+
+        _verifyConfig:
+            function ()
+            {
+                return (WxConfig && WxConfig.wsdot);
+            },
 
         _defaultSettings:
             {
@@ -76,14 +102,6 @@ if (! this.WsDotCommute)
         _init:
             function (settings)
             {
-                WsDotCommute._settings =
-                    $.extend
-                    (
-                        { },
-                        WsDotCommute._defaultSettings,
-                        settings || { }
-                    );
-            
                 WsDotCommute._decorateImages();
             },
 
@@ -160,7 +178,7 @@ if (! this.WsDotCommute)
                         'http://wsdot.com/Traffic/api/TravelTimes',
                         '/TravelTimesRest.svc/GetTravelTimesAsJson',
                         '?AccessCode=',
-                        WsDotCommute._APIKEY,
+                        WxConfig.wsdot.apiKey,
                         '&callback=?'
                     ]
                     .join('');

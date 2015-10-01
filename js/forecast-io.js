@@ -14,26 +14,35 @@ if (! this.ForecastIO)
             {
                 ForecastIO._init(settings);
 
+                // Check for a valid config for this library.
+
+                if (! ForecastIO._verifyConfig())
+                {
+                    // Configuration is missing.  Abort.
+
+                    ForecastIO._debug
+                    (
+                        [
+                            'ForecastIO.init(): no config found.',
+                            'Aborting.'
+                        ]
+                        .join(' ')
+                    );
+
+                    return;
+                }
+
+                ForecastIO._initEphemeris();
                 ForecastIO._registerTimers();
             },
 
         // private:
 
-        // Set with your own forecast.io API key and location.
-        // You can obtain a free API key good for 1000 requests a day
-        // at https://developer.forecast.io.
-
-        _APIKEY: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-
-        // Set with your own latitude and longitude.
-
-        _LOCATION:
+        _verifyConfig:
+            function ()
             {
-				latitude: 48.019722,
-				longitude: -122.066111
+                return (WxConfig && WxConfig.forecastIO);
             },
-        
-        // Default settings.
 
         _defaultSettings:
             {
@@ -75,7 +84,6 @@ if (! this.ForecastIO)
                     );
             
                 ForecastIO._decorateImages();
-                ForecastIO._initEphemeris();
             },
 
         _decorateImages:
@@ -96,6 +104,7 @@ if (! this.ForecastIO)
                 // use that space to glide through information to save space.
 
                 $('.TODAY_EPHEMERIS')
+                    .show()
                     .children()
                         .hide()
                         .filter(':first')
@@ -189,11 +198,11 @@ if (! this.ForecastIO)
                 var url = 
                     [
                         'https://api.forecast.io/forecast/',
-                        ForecastIO._APIKEY,
+                        WxConfig.forecastIO.apiKey,
                         '/',
-                        ForecastIO._LOCATION.latitude,
+                        WxConfig.forecastIO.loc.latitude,
                         ',',
-                        ForecastIO._LOCATION.longitude,
+                        WxConfig.forecastIO.loc.longitude,
                         '?callback=?'
                     ]
                     .join('');

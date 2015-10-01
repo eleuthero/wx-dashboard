@@ -43,6 +43,7 @@
 
     .TODAY_EPHEMERIS
     {
+        display: none;
         text-align: right;
     }
 

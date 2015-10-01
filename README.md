@@ -15,9 +15,11 @@ The user interface is deliberately simple and customizable, with the black backg
 
 0. Acquire or excavate from the hall closet a tablet-like device.  In my case, it's an iPad that has managed to outlive most of its technological contemporaries and managed to really look good doing so.  It deserves a place of honor behind the mirror in the entryway.
 1. Clone this project.
-2. Get a [forecast.io API key](https://developer.forecast.io).
-3. In `js/forecast-io.js`, assign your forecast.io API key to `_APIKEY`.  While you're there, under `_LOCATION`, also enter the latitude and the longitude of the location whose weather you wish to display.
-4. If you happen to live in Washington state, you may be interested in enabling the commute information provided by the Washington State Department of Transportation.  If so, go to http://wsdot.com/traffic/api to get an API key and assign it to `_APIKEY` in `js/wsdot-commute.js`.  If your local transit authority makes similar information available, it shouldn't be too difficult to adapt this code to integrate with it.  If you are not interested in commuting information, you can remove all references to `wsdot-commute.js` in `index.html`.
+2. If you are interested in displaying weather:
+  a. Get a [forecast.io API key](https://developer.forecast.io).
+  b. In `js/wx-dashboard-config.js`, assign your forecast.io API key to the `forecastIO` object.
+  c. While you're there, under `loc`, also enter the latitude and the longitude of the location whose weather you wish to display.
+4. If you happen to live in Washington state, you may be interested in enabling the commute information provided by the Washington State Department of Transportation.  If so, go to http://wsdot.com/traffic/api to get an API key and assign it in the `wsdot` object in `js/wx-dashboard-config.js`.  If your local transit authority makes similar information available, it shouldn't be too difficult to adapt this code to integrate with it.  If you are not interested in commuting information, you can remove all references to `wsdot-commute` in `index.html` or delete the `wsdot` object from `js/wx-dashboard-config.js`.
 5. Either load or copy all of the files not under the `misc` directory to the device and run `index.html`, or set it up on a server to be accessed by the device.  Your call.
 
 # References
