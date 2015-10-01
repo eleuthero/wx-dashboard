@@ -102,6 +102,7 @@ if (! this.WxDashboard)
                     $current =
                         $('<div>')
                             .hide()
+                            .data('source', info.source)
                             .appendTo($status);
                 }
 
