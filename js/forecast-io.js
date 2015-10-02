@@ -484,7 +484,8 @@ if (! this.ForecastIO)
                             .text
                             (
                                 [
-                                    hourlyData.precipProbability * 100,
+                                    (hourlyData.precipProbability * 100)
+                                        .toFixed(0),
                                     '%'
                                 ]
                                 .join('')
